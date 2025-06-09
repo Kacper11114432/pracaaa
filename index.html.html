@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Wesołych Świąt</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #fff0f5;
+            font-family: 'Georgia', serif;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .left {
+            width: 50%;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .left img {
+            max-width: 90%;
+            height: auto;
+        }
+
+        .right {
+            width: 50%;
+            background-color: #800020;
+            color: #fff;
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .floating-text {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffffff;
+            animation: float 3s infinite alternate ease-in-out;
+            z-index: 1001;
+
+            background-color: rgba(0, 0, 0, 0.5); /* półprzezroczyste tło */
+            padding: 10px 20px;
+            border-radius: 12px;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.8); /* cień tekstu */
+            white-space: nowrap;
+        }
+
+        @keyframes float {
+            from { transform: translate(-50%, 0); }
+            to   { transform: translate(-50%, 20px); }
+        }
+
+        /* Zegar w prawym górnym rogu */
+        #clock {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 24px;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 15px;
+            border-radius: 10px;
+            z-index: 1002;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="clock">00:00:00</div>
+
+<div class="floating-text">Wesołych Świąt!</div>
+
+<div class="container">
+    <div class="left">
+        <img src="animated_christmas.gif" alt="Świąteczny gif">
+    </div>
+    <div class="right">
+        <h1>Kolęda: Cicha noc</h1>
+        <p>
+            Cicha noc, święta noc,<br>
+            Pokój niesie ludziom wszem,<br>
+            A u żłóbka Matka Święta<br>
+            Czuwa sama, uśmiechnięta<br>
+            Nad Dzieciątka snem.<br><br>
+
+            Cicha noc, święta noc,<br>
+            Pastuszkowie od swych trzód<br>
+            Biegną wielce zadziwieni<br>
+            Za anielskim głosem pieni<br>
+            Gdzie się spełnił cud.
+        </p>
+    </div>
+</div>
+
+<!-- Skrypt padającego śniegu -->
+<script>
+    let numFlakes = 20;
+    let flakes = [];
+
+    for (let i = 0; i < numFlakes; i++) {
+        let flake = document.createElement("img");
+        flake.src = "snow2.gif";
+        flake.style.position = "absolute";
+        flake.style.top = Math.random() * window.innerHeight + "px";
+        flake.style.left = Math.random() * window.innerWidth + "px";
+        flake.style.width = "12px";
+        flake.style.height = "12px";
+        document.body.appendChild(flake);
+        flakes.push({
+            el: flake,
+            x: parseFloat(flake.style.left),
+            y: parseFloat(flake.style.top),
+            speedY: 1 + Math.random() * 3,
+            speedX: -1 + Math.random() * 2
+        });
+    }
+
+    function animateSnow() {
+        for (let flake of flakes) {
+            flake.y += flake.speedY;
+            flake.x += flake.speedX;
+
+            if (flake.y > window.innerHeight) flake.y = -12;
+            if (flake.x > window.innerWidth) flake.x = 0;
+            if (flake.x < 0) flake.x = window.innerWidth;
+
+            flake.el.style.top = flake.y + "px";
+            flake.el.style.left = flake.x + "px";
+        }
+        requestAnimationFrame(animateSnow);
+    }
+
+    animateSnow();
+
+    // Zegar cyfrowy
+    function updateClock() {
+        const clock = document.getElementById('clock');
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        clock.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
+
+</body>
+</html>
